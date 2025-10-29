@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type TaskStatus string
 
 const (
@@ -8,7 +10,9 @@ const (
 	StatusCompleted  TaskStatus = "completed"
 )
 
-type Tasks struct {
-	Title  string     `json:"title"`
-	Status TaskStatus `json:"status"`
+type Task struct {
+	ID        uint       `json:"id"`
+	Title     string     `json:"title"`
+	Status    TaskStatus `json:"status"`
+	CreatedAt time.Time  `json:"created_at"`
 }
