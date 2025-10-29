@@ -14,8 +14,10 @@ type TaskRepository struct {
 	mu       sync.Mutex
 }
 
-func NewTaskRepository() *TaskRepository {
-	return &TaskRepository{}
+func NewTaskRepository(filePath string) *TaskRepository {
+	return &TaskRepository{
+		filePath: filePath,
+	}
 }
 
 // helper: write task to file
@@ -23,6 +25,11 @@ func NewTaskRepository() *TaskRepository {
 func (r *TaskRepository) writeTask(tasks []models.Task) error {
 	data, err := json.MarshalIndent(tasks, "", "  ")
 	if err != nil {
+		return err
+	}
+
+	// ✅ Ensure folder exists before writing
+	if err := os.MkdirAll("data", 0755); err != nil {
 		return err
 	}
 
@@ -37,6 +44,11 @@ func (r *TaskRepository) readTasks() ([]models.Task, error) {
 		return []models.Task{}, nil //no file yet
 	} else if error != nil {
 		return nil, error
+	}
+
+	// ✅ FIX: handle empty files gracefully
+	if len(file) == 0 {
+		return []models.Task{}, nil
 	}
 
 	var tasks []models.Task
