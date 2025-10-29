@@ -52,7 +52,7 @@ func (r *TaskRepository) readTasks() ([]models.Task, error) {
 
 // Create Tasks
 
-func (r *TaskRepository) create(title string) error {
+func (r *TaskRepository) Create(title string) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
