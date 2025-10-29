@@ -1,0 +1,60 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Build directories
+/bin/
+/build/
+/dist/
+/out/
+/release/
+
+# Compiled objects
+*.o
+*.a
+*.out
+
+# Test binaries
+*.test
+
+# Go build cache
+*.log
+*.tmp
+*.cache
+*.cover
+*.coverprofile
+
+# Go workspace
+/go.work
+/go.work.sum
+
+# Dependency directories
+/vendor/
+
+# Environment files
+.env
+.env.*
+!.env.example   # Keep example env files for reference
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+
+# OS-specific
+Thumbs.db
+.DS_Store
+
+# Temporary or local data
+*.local
+*.bak
+*.old
+
+# Docker
+*.pid
+docker-compose.override.yml
