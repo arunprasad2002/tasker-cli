@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"os"
+	"path/filepath"
 	"sync"
 	"tasker/internals/models"
 	"time"
@@ -29,7 +30,7 @@ func (r *TaskRepository) writeTask(tasks []models.Task) error {
 	}
 
 	// ✅ Ensure folder exists before writing
-	if err := os.MkdirAll("data", 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(r.filePath), 0755); err != nil {
 		return err
 	}
 

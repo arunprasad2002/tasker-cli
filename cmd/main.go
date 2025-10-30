@@ -18,7 +18,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	repo := repository.NewTaskRepository("data/tasks.json")
+	repo := repository.NewTaskRepository("storage/tasks.json")
 	service := service.NewTaskService(repo)
 
 	switch os.Args[1] {
