@@ -3,6 +3,7 @@ package repository
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"sync"
@@ -85,6 +86,41 @@ func (r *TaskRepository) Create(title string) error {
 	tasks = append(tasks, newTask)
 
 	return r.writeTask(tasks)
+}
+
+func (r *TaskRepository) Delete(id uint) (string, error) {
+	// step 1: read all tasks
+	tasks, err := r.readTasks()
+
+	if err != nil {
+		return "", err
+	}
+	//step 2: create a new slice excluding the task with matching ID
+	updatedTasks := []models.Task{}
+	found := false
+
+	for _, task := range tasks {
+		if task.ID == id {
+			found = true
+			continue
+		}
+
+		updatedTasks = append(updatedTasks, task)
+	}
+
+	// Step 3: Handle case where task not found
+
+	if !found {
+		return "", fmt.Errorf("task with id %d not found", id)
+	}
+
+	err = r.writeTask(updatedTasks)
+
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("Task with ID %d deleted successfully.", id), nil
 }
 
 // Get All Tasks

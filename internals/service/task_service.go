@@ -22,3 +22,7 @@ func (s *TaskService) CreateTask(title string) error {
 func (s *TaskService) ListTasks() ([]models.Task, error) {
 	return s.repo.GetAll()
 }
+
+func (s *TaskService) DeleteTask(id uint) (string, error) {
+	return s.repo.Delete(id)
+}

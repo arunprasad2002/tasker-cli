@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 	"tasker/internals/repository"
 	"tasker/internals/service"
 )
@@ -12,6 +13,7 @@ import (
 func main() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
+	deleteCmd := flag.NewFlagSet("delete", flag.ExitOnError)
 
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'add' or 'list' subcommands")
@@ -45,6 +47,28 @@ func main() {
 
 		for _, task := range tasks {
 			fmt.Printf("[%d] %s - %s\n", task.ID, task.Title, task.Status)
+		}
+
+	case "delete":
+		deleteCmd.Parse(os.Args[2:])
+		if deleteCmd.NArg() < 1 {
+			fmt.Println("please provide task ID to delete")
+			return
+		}
+
+		idStr := deleteCmd.Arg(0)
+		id, err := strconv.Atoi(idStr)
+
+		if err != nil {
+			fmt.Println("Invalid task ID:", idStr)
+		}
+
+		msg, err := service.DeleteTask(uint(id))
+
+		if err != nil {
+			fmt.Println(err)
+		} else {
+			fmt.Println(msg)
 		}
 	default:
 		fmt.Println("expected 'add' or 'list' subcommands")
