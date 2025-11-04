@@ -123,6 +123,50 @@ func (r *TaskRepository) Delete(id uint) (string, error) {
 	return fmt.Sprintf("Task with ID %d deleted successfully.", id), nil
 }
 
+// Update Task
+
+func (r *TaskRepository) UpdateTask(id uint, title string, status models.TaskStatus) (string, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	// Step 1: Read all tasks
+	tasks, err := r.readTasks()
+	if err != nil {
+		return "", err
+	}
+
+	found := false
+
+	// Step 2: Update the matching task
+	for i, task := range tasks {
+		if task.ID == id {
+			found = true
+
+			if title != "" {
+				tasks[i].Title = title
+			}
+			if status != "" {
+				tasks[i].Status = status
+			}
+
+			tasks[i].UpdatedAt = time.Now()
+			break
+		}
+	}
+
+	// Step 3: Handle not found
+	if !found {
+		return "", fmt.Errorf("task with id %d not found", id)
+	}
+
+	// Step 4: Write the updated slice back to file
+	if err := r.writeTask(tasks); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("Task with ID %d updated successfully.", id), nil
+}
+
 // Get All Tasks
 func (r *TaskRepository) GetAll() ([]models.Task, error) {
 	return r.readTasks()

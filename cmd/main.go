@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"tasker/internals/models"
 	"tasker/internals/repository"
 	"tasker/internals/service"
 )
@@ -14,6 +15,9 @@ func main() {
 	addCmd := flag.NewFlagSet("add", flag.ExitOnError)
 	listCmd := flag.NewFlagSet("list", flag.ExitOnError)
 	deleteCmd := flag.NewFlagSet("delete", flag.ExitOnError)
+	updateCmd := flag.NewFlagSet("update", flag.ExitOnError)
+	updateTitle := updateCmd.String("title", "", "New title for the task")
+	updateStatus := updateCmd.String("status", "", "New status for the task (e.g., pending, done)")
 
 	if len(os.Args) < 2 {
 		fmt.Println("expected 'add' or 'list' subcommands")
@@ -70,6 +74,42 @@ func main() {
 		} else {
 			fmt.Println(msg)
 		}
+
+	case "update":
+		// We expect: update <id> [--title <title>] [--status <status>]
+		if len(os.Args) < 3 {
+			fmt.Println("usage: update <id> [--title <title>] [--status <status>]")
+			return
+		}
+
+		// Extract ID manually
+		idStr := os.Args[2]
+		id, err := strconv.Atoi(idStr)
+		if err != nil {
+			fmt.Println("❌ invalid task ID:", idStr)
+			return
+		}
+
+		// Parse flags AFTER the ID
+		updateCmd.Parse(os.Args[3:])
+
+		if *updateTitle == "" && *updateStatus == "" {
+			fmt.Println("please provide at least one field to update (--title or --status)")
+			return
+		}
+
+		var status models.TaskStatus
+		if *updateStatus != "" {
+			status = models.TaskStatus(*updateStatus)
+		}
+
+		msg, err := service.UpdateTask(uint(id), *updateTitle, status)
+		if err != nil {
+			fmt.Println("❌ error:", err)
+		} else {
+			fmt.Println("✅", msg)
+		}
+
 	default:
 		fmt.Println("expected 'add' or 'list' subcommands")
 	}

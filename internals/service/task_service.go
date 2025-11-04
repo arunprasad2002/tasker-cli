@@ -26,3 +26,7 @@ func (s *TaskService) ListTasks() ([]models.Task, error) {
 func (s *TaskService) DeleteTask(id uint) (string, error) {
 	return s.repo.Delete(id)
 }
+
+func (s *TaskService) UpdateTask(id uint, title string, status models.TaskStatus) (string, error) {
+	return s.repo.UpdateTask(id, title, status)
+}
