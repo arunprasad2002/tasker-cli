@@ -19,8 +19,26 @@ func (s *TaskService) CreateTask(title string) error {
 	return s.repo.Create(title)
 }
 
-func (s *TaskService) ListTasks() ([]models.Task, error) {
-	return s.repo.GetAll()
+func (s *TaskService) ListTasks(status models.TaskStatus) ([]models.Task, error) {
+	tasks, err := s.repo.GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	// If no status is provided, return all tasks
+	if status == "" {
+		return tasks, nil
+	}
+
+	var filteredTasks []models.Task
+
+	for _, t := range tasks {
+		if t.Status == status {
+			filteredTasks = append(filteredTasks, t)
+		}
+	}
+
+	return filteredTasks, nil
 }
 
 func (s *TaskService) DeleteTask(id uint) (string, error) {

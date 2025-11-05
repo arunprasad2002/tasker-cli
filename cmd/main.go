@@ -43,7 +43,11 @@ func main() {
 
 	case "list":
 		listCmd.Parse(os.Args[2:])
-		tasks, err := service.ListTasks()
+		var status string
+		if len(os.Args) > 2 {
+			status = os.Args[2]
+		}
+		tasks, err := service.ListTasks(models.TaskStatus(status))
 		if err != nil {
 			fmt.Println("error:", err)
 			return
