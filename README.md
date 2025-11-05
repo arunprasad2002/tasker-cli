@@ -2,6 +2,8 @@
 
 **Project URL:** https://github.com/arunprasad2002/tasker-cli
 
+**Project Page:** https://arunprasad2002.github.io/tasker-cli
+
 Tasker is a simple command‑line task manager written in Go. It stores tasks in a local JSON file and provides basic CRUD operations to help you track what needs doing.
 
 ### Features
