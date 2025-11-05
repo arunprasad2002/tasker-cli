@@ -1,113 +1,44 @@
-## Tasker
+# Tasker
 
-**Project URL:** https://github.com/arunprasad2002/tasker-cli
+https://github.com/arunprasad2002/tasker-cli
 
-**Project Page:** https://arunprasad2002.github.io/tasker-cli
 
-Tasker is a simple command‑line task manager written in Go. It stores tasks in a local JSON file and provides basic CRUD operations to help you track what needs doing.
 
-### Features
-- Add tasks
-- List tasks (optionally filtered by status)
-- Update title or status
-- Mark tasks as done or in‑progress
-- Delete tasks
-- Persistent storage in `storage/tasks.json`
+Tasker is a simple command-line task manager written in Go. It stores tasks in a local JSON file and provides basic CRUD operations to help you track what needs doing.
 
-### Requirements
-- Go (matching the version in `go.mod`)
+## How to run
 
-### Project structure
-```
-cmd/
-  main.go            # CLI entrypoint
-internals/
-  models/            # Domain models (Task, TaskStatus)
-  repository/        # JSON file repository
-  service/           # Business logic
-storage/
-  tasks.json         # Data store (auto‑created)
-go.mod
+Clone the repository and run the following command:
+
+```bash
+git clone https://github.com/arunprasad2002/tasker-cli.git
+cd tasker-cli
 ```
 
-### Build
+Run the following command to build and run the project:
+
 ```bash
 go build -o tasker ./cmd
-```
+./tasker --help # To see the list of available commands
 
-### Run without building
-```bash
-go run ./cmd --help
-```
+# To add a task
+./tasker add "Buy groceries"
 
-### Usage
-Tasks are stored in `storage/tasks.json`. The repository ensures the folder/file exists when needed.
+# To update a task
+./tasker update 1 --title "Buy groceries and cook dinner"
+./tasker update 1 --status completed
+./tasker update 1 --title "Buy groceries and cook dinner" --status in_progress
 
-Statuses supported by the model are: `pending`, `in_progress`, `completed`.
+# To delete a task
+./tasker delete 1
 
-#### Add a task
-```bash
-./tasker add "Buy milk"
-# ✅ task added: Buy milk
-```
+# To mark a task as in progress/done
+./tasker mark-in-progress 1
+./tasker mark-done 1
 
-#### List tasks
-```bash
+# To list all tasks
 ./tasker list
-```
-
-Filter by status (optional argument):
-```bash
 ./tasker list pending
 ./tasker list in_progress
 ./tasker list completed
 ```
-
-Output example:
-```
-[1] Buy milk - pending
-[2] Write report - in_progress
-```
-
-#### Mark a task done
-```bash
-./tasker mark-done 1
-```
-
-#### Mark a task in‑progress
-```bash
-./tasker mark-in-progress 2
-```
-
-#### Update a task (title and/or status)
-```bash
-./tasker update <id> [--title <new title>] [--status <pending|in_progress|completed>]
-
-# examples
-./tasker update 3 --title "Write weekly report"
-./tasker update 3 --status completed
-./tasker update 3 --title "Write weekly report" --status in_progress
-```
-
-#### Delete a task
-```bash
-./tasker delete <id>
-```
-
-### Data file
-- Location: `storage/tasks.json`
-- Created automatically on first write
-- You can back it up or version it if you want to persist tasks
-
-### Development
-- Run directly during development: `go run ./cmd <command> ...`
-- Lint/test with your preferred tools; the code is plain Go with no external deps for storage.
-
-### Notes
-- Listing accepts an optional single status argument to filter results.
-- The repository handles empty/nonexistent data files gracefully.
-
-### License
-Add your preferred license here.
-
-
