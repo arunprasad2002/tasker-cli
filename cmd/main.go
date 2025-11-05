@@ -57,6 +57,45 @@ func main() {
 			fmt.Printf("[%d] %s - %s\n", task.ID, task.Title, task.Status)
 		}
 
+	case "mark-done":
+		if len(os.Args) < 3 {
+			fmt.Println("Usage: mark-done <id>")
+		}
+
+		id, err := strconv.Atoi(os.Args[2])
+
+		if err != nil {
+			fmt.Println("Invalid task ID")
+			return
+		}
+
+		msg, err := service.MarkStatus(uint(id), "done")
+
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		fmt.Println(msg)
+
+	case "mark-in-progress":
+		if len(os.Args) < 3 {
+			fmt.Println("Usage: mark-in-progress <id>")
+			return
+		}
+
+		id, err := strconv.Atoi(os.Args[2])
+		if err != nil {
+			fmt.Println("Invalid task ID")
+			return
+		}
+
+		msg, err := service.UpdateTask(uint(id), "", "in-progress")
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+		fmt.Println(msg)
 	case "delete":
 		deleteCmd.Parse(os.Args[2:])
 		if deleteCmd.NArg() < 1 {

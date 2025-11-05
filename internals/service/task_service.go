@@ -41,6 +41,10 @@ func (s *TaskService) ListTasks(status models.TaskStatus) ([]models.Task, error)
 	return filteredTasks, nil
 }
 
+func (s *TaskService) MarkStatus(id uint, status models.TaskStatus) (string, error) {
+	return s.repo.UpdateTask(id, "", status)
+}
+
 func (s *TaskService) DeleteTask(id uint) (string, error) {
 	return s.repo.Delete(id)
 }
